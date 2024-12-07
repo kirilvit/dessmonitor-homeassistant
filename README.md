@@ -103,7 +103,9 @@ The following devices are checked to be supported by the API:
 You can use any card to display the data, but I recommend using
 the [sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card).
 
-I use the following config, but you can customize it to your needs:
+![](docs/card.png)
+
+com API client forI use the following config, but you can customize it to your needs:
 
 ```yaml
 type: custom:sunsynk-power-flow-card
