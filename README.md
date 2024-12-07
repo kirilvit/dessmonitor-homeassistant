@@ -1,34 +1,12 @@
-# dessmonitor.com API integration into HomeAssistant
+# dessmonitor.com (a.k.a. SmartESS) API integration into HomeAssistant
 
 This repo provides instruction to activate [dessmonitor.com](https://dessmonitor.com) API fetching in HomeAssistant,
-create sensors for monitoring the inverter data and add a dashboard to display the data.
-
-## Exported sensors
-
-The following sensors are created by the API:
-
-| Name                      | Sensor ID                        | Unit of Measure | Description                                                             |
-|---------------------------|----------------------------------|-----------------|-------------------------------------------------------------------------|
-| Grid Voltage              | sensor.grid_voltage              | V               | Voltage of the grid                                                     |
-| Grid Frequency            | sensor.grid_frequency            | Hz              | Frequency of the grid                                                   |
-| Grid Power                | sensor.grid_power                | W               | Power from the grid                                                     |
-| PV1 Voltage               | sensor.pv1_voltage               | V               | Voltage of the first photovoltaic panel                                 |
-| PV1 Current               | sensor.pv1_current               | A               | Current of the first photovoltaic panel                                 |
-| PV1 Power                 | sensor.pv1_power                 | W               | Power of the first photovoltaic panel                                   |
-| Battery Voltage           | sensor.battery_voltage           | V               | Voltage of the battery                                                  |
-| Battery Power             | sensor.battery_power             | W               | Power of the battery                                                    |
-| Battery SOC               | sensor.battery_soc               | %               | State of charge of the battery                                          |
-| Battery Discharge Current | sensor.battery_discharge_current | A               | Discharge current of the battery                                        |
-| Battery Charging Current  | sensor.battery_charging_current  | A               | Charging current of the battery                                         |
-| Battery Current           | sensor.battery_current           | A               | Total current of the battery (absolute value of charging + discharging) |
-| Battery Current Direction | sensor.battery_current_direction |                 | Direction of the battery current (1 for charging, 0 for discharging)    |
-| Load Output Voltage       | sensor.load_output_voltage       | V               | Voltage of the load output                                              |
-| Load Power                | sensor.load_power                | W               | Power of the load                                                       |
+create sensors for monitoring the inverter data and add a dashboard card to display the data.
 
 ## Supported devices
 
 This API is available for devices, that use
-SmartEss ([Android](https://play.google.com/store/apps/details?id=com.eybond.smartclient.ess&hl=uk)
+**SmartEss** ([Android](https://play.google.com/store/apps/details?id=com.eybond.smartclient.ess&hl=uk)
 and [iOS](https://apps.apple.com/ua/app/smartess/id1334656760?l=uk)) mobile application.
 The application is a recommended app for
 the [WiFi Plug Pro](https://www.inverter.com/images/uploaded/solar-inverter-charger-wifi-plug-pro.pdf) data logger
@@ -49,6 +27,29 @@ The following devices are checked to be supported by the API:
 - MuscleGrid 6KW
 - MuscleGrid 6.2 KW True Hybrid
 - ... and probaby dozen of others, as they use the same logger inside. Please open a PR to add your device to the list.
+ 
+## Exported sensors
+
+The following sensors are available via the API:
+
+| Name                      | Sensor ID                        | Unit of Measure | Description                                                             |
+|---------------------------|----------------------------------|-----------------|-------------------------------------------------------------------------|
+| Grid Voltage              | sensor.grid_voltage              | V               | Voltage of the grid                                                     |
+| Grid Frequency            | sensor.grid_frequency            | Hz              | Frequency of the grid                                                   |
+| Grid Power                | sensor.grid_power                | W               | Power from the grid                                                     |
+| PV1 Voltage               | sensor.pv1_voltage               | V               | Voltage of the first photovoltaic panel                                 |
+| PV1 Current               | sensor.pv1_current               | A               | Current of the first photovoltaic panel                                 |
+| PV1 Power                 | sensor.pv1_power                 | W               | Power of the first photovoltaic panel                                   |
+| Battery Voltage           | sensor.battery_voltage           | V               | Voltage of the battery                                                  |
+| Battery Power             | sensor.battery_power             | W               | Power of the battery                                                    |
+| Battery SOC               | sensor.battery_soc               | %               | State of charge of the battery                                          |
+| Battery Discharge Current | sensor.battery_discharge_current | A               | Discharge current of the battery                                        |
+| Battery Charging Current  | sensor.battery_charging_current  | A               | Charging current of the battery                                         |
+| Battery Current           | sensor.battery_current           | A               | Total current of the battery (absolute value of charging + discharging) |
+| Battery Current Direction | sensor.battery_current_direction |                 | Direction of the battery current (1 for charging, 0 for discharging)    |
+| Load Output Voltage       | sensor.load_output_voltage       | V               | Voltage of the load output                                              |
+| Load Power                | sensor.load_power                | W               | Power of the load                                                       |
+
 
 ## Preparation
 
@@ -58,16 +59,17 @@ The following devices are checked to be supported by the API:
    on your smartphone, register
    and [connect to your inverter or data logger](https://www.youtube.com/watch?v=23u8nguNJSY).
 
-2. Visit [dessmonitor.com](https://dessmonitor.com) and login with your credentials.
+2. Visit [dessmonitor.com](https://dessmonitor.com) and login with login/password from the mobile application. Make sure you see your
+    inverter data on the dashboard.
 
-3. Open the **Developer Tools** in your browser (F12) and go to the **Network** tab.
+3. Open the **Developer Tools** in your browser (F12), go to the **Network** tab and refresh the page.
 
-4. Filter by `querySPDeviceLastData`, choose a request and copy the **Request URL**.
+4. Filter requests by `querySPDeviceLastData`, choose a request and copy the **Request URL**.
    ![](docs/devtools.png)
 
 ## Add the API to HomeAssistant
 
-1. Add the **Request URL** to your `secrets.yaml` file:
+1. Add the **Request URL** from the previous step to your `secrets.yaml` file:
     ```yaml
     dessmonitor_api_uri: https://web.dessmonitor.com/public/?sign=1c564f94e6d87558349aaa727f46711e0a890c&salt=173366847376&token=f82ea90e2a8261236cf4da6c28ac9293dc59148ff9a03a2765d8c0db5b6d&action=querySPDeviceLastData&source=1&devcode=2429&pn=W0051291612612&devaddr=1&sn=W0051291612612&i18n=en_US
     ```
