@@ -60,15 +60,14 @@ The following devices are checked to be supported by the API:
 
 2. Visit [dessmonitor.com](https://dessmonitor.com) and login with your credentials.
 
-3. Open the Developer Tools in your browser (F12) and go to the Network tab.
+3. Open the **Developer Tools** in your browser (F12) and go to the **Network** tab.
 
-4. Filter by `querySPDeviceLastData`, choose a request and copy the `Request URL`.
+4. Filter by `querySPDeviceLastData`, choose a request and copy the **Request URL**.
    ![](docs/devtools.png)
 
 ## Add the API to HomeAssistant
 
-1. Add the Request URL to your `secrets.yaml` file:
-   Example:
+1. Add the **Request URL** to your `secrets.yaml` file:
     ```yaml
     dessmonitor_api_uri: https://web.dessmonitor.com/public/?sign=1c564f94e6d87558349aaa727f46711e0a890c&salt=173366847376&token=f82ea90e2a8261236cf4da6c28ac9293dc59148ff9a03a2765d8c0db5b6d&action=querySPDeviceLastData&source=1&devcode=2429&pn=W0051291612612&devaddr=1&sn=W0051291612612&i18n=en_US
     ```
@@ -105,7 +104,7 @@ the [sunsynk-power-flow-card](https://github.com/slipx06/sunsynk-power-flow-card
 
 ![](docs/card.png)
 
-com API client forI use the following config, but you can customize it to your needs:
+I use the following config, but you can customize it to your needs:
 
 ```yaml
 type: custom:sunsynk-power-flow-card
