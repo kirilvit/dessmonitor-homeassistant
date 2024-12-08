@@ -87,7 +87,7 @@ The following sensors are available via the API:
           - pv_
           - bt_
           - bc_
-        scan_interval: 60
+        scan_interval: 120 # Update every 2 minutes
         value_template: "OK"
     ```
 
@@ -113,7 +113,6 @@ type: custom:sunsynk-power-flow-card
 cardstyle: lite
 show_solar: false
 battery:
-  energy: 0
   shutdown_soc: 20
   show_daily: false
   hide_soc: false
@@ -121,7 +120,9 @@ battery:
   show_absolute: false
   animate: true
   linear_gradient: true
-  invert_power: true
+  invert_power: false
+  soc_end_of_charge: 90
+  show_remaining_energy: false
 solar:
   show_daily: false
   mppts: 0
@@ -136,7 +137,6 @@ grid:
 entities:
   use_timer_248: none
   inverter_voltage_154: sensor.load_output_voltage
-  load_frequency_192: sensor.grid_frequency
   inverter_power_175: sensor.load_power
   inverter_status_59: sensor.sunsynk_overall_state
   day_battery_charge_70: none

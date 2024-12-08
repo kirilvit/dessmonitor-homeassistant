@@ -70,7 +70,7 @@
       state: >
         {% set bt_items = state_attr('sensor.inverter_data', 'bt_') %}
         {% set discharge_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_discharge_current') | map(attribute='val') | first) | float %}
-        {% set charging_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_charging_current') | map(attribute='val') | first) | float %}
+        {% set charging_current = -((bt_items | selectattr('id', 'equalto', 'bt_battery_charging_current') | map(attribute='val') | first) | float) %}
         {% set battery_voltage = (bt_items | selectattr('id', 'equalto', 'bt_battery_voltage') | map(attribute='val') | first) | float %}
         {% set battery_current = charging_current + discharge_current %}
         {{ (battery_current * battery_voltage) | float }}
@@ -89,7 +89,7 @@
     - name: "Battery Discharge Current"
       state: >
         {% set bt_items = state_attr('sensor.inverter_data', 'bt_') %}
-        {{ (bt_items | selectattr('id', 'equalto', 'bt_battery_discharge_current') | map(attribute='val') | first) | float }}
+        {{ -((bt_items | selectattr('id', 'equalto', 'bt_battery_discharge_current') | map(attribute='val') | first) | float) }}
       unit_of_measurement: "A"
       device_class: "current"
       state_class: "measurement"
@@ -106,8 +106,8 @@
       state: >
         {% set bt_items = state_attr('sensor.inverter_data', 'bt_') %}
         {% set discharge_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_discharge_current') | map(attribute='val') | first) | float %}
-        {% set charging_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_charging_current') | map(attribute='val') | first) | float %}
-        {{ (charging_current + discharge_current) | float | abs }}
+        {% set charging_current = -((bt_items | selectattr('id', 'equalto', 'bt_battery_charging_current') | map(attribute='val') | first) | float) %}
+        {{ (charging_current + discharge_current) | float }}
       unit_of_measurement: "A"
       device_class: "current"
       state_class: "measurement"
@@ -115,7 +115,6 @@
     - name: "Battery Current Direction"
       state: >
         {% set bt_items = state_attr('sensor.inverter_data', 'bt_') %}
-        {% set discharge_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_discharge_current') | map(attribute='val') | first) | float %}
         {% set charging_current = (bt_items | selectattr('id', 'equalto', 'bt_battery_charging_current') | map(attribute='val') | first) | float %}
         {{ 1 if charging_current > 0 else 0 }}
 
