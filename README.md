@@ -15,18 +15,8 @@ is built in a bunch of inverters, so the API is available for them as well.
 
 The following devices are checked to be supported by the API:
 
-- Sorotec REVO VM II PRO 3.2kW/24V Wi-Fi
-- Sorotec REVO VM II PRO 3.5kW/24V Wi-Fi
-- Sorotec REVO HM 6kW/48V Wi-Fi
-- Sorotec REVO VM IV PRO-T 6kW/48V Wi-Fi
-- Sorotec REVO HMT 6kW/48V Wi-Fi
-- Sorotec REVO HES 6kW/48V Wi-Fi
-- Sorotec REVO HMT 11kW/48V Wi-Fi
-- MuscleGrid 4.2 KW
-- MuscleGrid 10.2 KW
-- MuscleGrid 6KW
-- MuscleGrid 6.2 KW True Hybrid
-- ... and probaby dozen of others, as they use the same logger inside. Please open a PR to add your device to the list.
+- PowMr 6.2 Wi-Fi
+
  
 ## Exported sensors
 
@@ -71,7 +61,8 @@ The following sensors are available via the API:
 
 1. Add the **Request URL** from the previous step to your `secrets.yaml` file:
     ```yaml
-    dessmonitor_api_uri: https://web.dessmonitor.com/public/?sign=1c564f94e6d87558349aaa727f46711e0a890c&salt=173366847376&token=f82ea90e2a8261236cf4da6c28ac9293dc59148ff9a03a2765d8c0db5b6d&action=querySPDeviceLastData&source=1&devcode=2429&pn=W0051291612612&devaddr=1&sn=W0051291612612&i18n=en_US
+    dessmonitor_api_uri: https://web.dessmonitor.com/public/?sign=&salt=&token=&action=querySPDeviceLastData&source=1&devcode=&pn=&devaddr=1&sn=&i18n=en_US
+    dessmonitor_energy_flow_api_uri: https://web.dessmonitor.com/public/?sign=&salt=&token=&action=webQueryDeviceEnergyFlowEs&source=1&devcode=2376&pn=&devaddr=1&sn=
     ```
 2. Add the following sensor to your `configuration.yaml` file:
     ```yaml
@@ -87,6 +78,18 @@ The following sensors are available via the API:
           - pv_
           - bt_
           - bc_
+        scan_interval: 120 # Update every 2 minutes
+        value_template: "OK"
+      - platform: rest
+        name: Inverter Energy Flow Data
+        resource_template: !secret dessmonitor_energy_flow_api_uri
+        method: GET
+        json_attributes_path: "$.dat"
+        json_attributes:
+          - bt_status
+          - pv_status
+          - gd_status
+          - bc_status
         scan_interval: 120 # Update every 2 minutes
         value_template: "OK"
     ```
